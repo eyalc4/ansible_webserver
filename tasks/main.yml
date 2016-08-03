@@ -1,0 +1,7 @@
+---
+- debug: msg="PHP VErsion webserver main {{ php_version }}"
+- include: install_php.yml
+- include: httpd.yml
+- include: firewall.yml
+- include: composer.yml
+- include: memcached.yml

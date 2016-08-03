@@ -1,0 +1,20 @@
+---
+- name: "Set composer file variable"
+  stat: path=/usr/local/bin/composer
+  register: composer_path
+  ignore_errors: True
+
+- name: Check if Composer is installed.
+  stat: path=/usr/local/bin/composer
+  register: composer_bin
+
+- name: "Get composer"
+  command: wget https://getcomposer.org/installer
+  when: not composer_bin.stat.exists
+
+- name: "Install Composer"
+  command: php installer --install-dir=/usr/local/bin --filename=composer
+
+#- name: "move composer"
+#  command: mv composer.phar /usr/local/bin/composer
+  #when: composer_file.stat.exists is defined and composer_file.stat.exists

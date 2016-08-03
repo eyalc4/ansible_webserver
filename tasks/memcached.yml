@@ -1,0 +1,19 @@
+---
+- name: Install Memcached
+  yum: name=memcached state=present enablerepo=remi,remi-php{{ php_version }}
+
+- name: Inastall php memcache extension
+  yum: name=php-pecl-memcache state=present enablerepo=remi,remi-php{{ php_version }}
+
+# Configure Memcached.
+- name: Copy Memcached configuration.
+  template:
+    src: memcached-redhat.conf.j2
+    dest: "{{ memcached_config_file }}"
+    owner: root
+    group: root
+    mode: 0644
+  notify: restart memcached
+
+- name: Ensure Memcached is started and set to run on startup.
+  service: name=memcached state=started enabled=yes
