@@ -1,7 +1,6 @@
 ---
-- debug: msg="PHP VErsion webserver install_php {{ php_version }}"
 # Installs php on webservers
-- name: Ensure PHP Packages are installed
+- name: Ensure PHP Packages are installed - version {{ php_version }}
   yum: name={{ item }} state=present enablerepo=remi,remi-php{{ php_version }}
   with_items:
     - php
@@ -11,10 +10,5 @@
     - php-gd
     - php-mbstring
     - php-opcache
-    - php-fpm
     - php-devel
     - zlib-devel
-
-- name: Ensure php-fpm is running and start at boot
-  service: name=php-fpm state=running enabled=yes
-

@@ -18,25 +18,3 @@
 - name: Enable MPM-Event
   lineinfile: dest=/etc/httpd/conf.modules.d/00-mpm.conf state=present regexp='^#LoadModule mpm_event_module.*' line='LoadModule mpm_event_module modules/mod_mpm_event.so'
   notify: restart httpd
-
-- name: Disable mod_php
-  lineinfile: dest=/etc/httpd/conf.d/php.conf state=present regexp='^\s*SetHandler application/x-httpd-php$' line='\t#SetHandler application/x-httpd-php'
-  notify: restart httpd
-
-- name: Configure php-fpm instead of mod_php
-  lineinfile: dest=/etc/httpd/conf.d/php.conf state=present insertafter='^\s*SetHandler application/x-httpd-php' line='\tSetHandler "proxy:fcgi://127.0.0.1:9000"'
-  notify: restart php-fpm
-
-- name: "php-fpm: Catch workers output"
-  lineinfile: dest=/etc/php-fpm.d/www.conf state=present regexp='^catch_workers_output = .*' line='catch_workers_output = yes'
-  notify: restart php-fpm
-
-- name: "php-fpm: redirect php-fpm errors to stderr"
-  lineinfile: dest=/etc/php-fpm.d/www.conf state=present regexp='^php_admin_value[error_log] = .*' line='php_admin_value[error_log] = stderr'
-  notify: restart php-fpm
-
-#- name: Restart php-fpm
-#  service: name=php-fpm state=restarted
-
-#- name: Restart httpd
-#  service: name=httpd state=restarted
