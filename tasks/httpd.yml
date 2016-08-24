@@ -12,9 +12,9 @@
   service: name=httpd state=running enabled=yes
 
 - name: Disable MPM-prefork
-  lineinfile: dest=/etc/httpd/conf.modules.d/00-mpm.conf state=present regexp='^LoadModule mpm_prefork_module.*' line='#LoadModule mpm_prefork_module modules/mod_mpm_prefork.so'
+  lineinfile: dest=/etc/httpd/conf.modules.d/00-mpm.conf state=present regexp='^LoadModule mpm_prefork_module.*' line='#LoadModule mpm_prefork_module modules/mod_mpm_prefork.so' backrefs=yes
   notify: restart httpd
 
 - name: Enable MPM-Event
-  lineinfile: dest=/etc/httpd/conf.modules.d/00-mpm.conf state=present regexp='^#LoadModule mpm_event_module.*' line='LoadModule mpm_event_module modules/mod_mpm_event.so'
+  lineinfile: dest=/etc/httpd/conf.modules.d/00-mpm.conf state=present regexp='LoadModule mpm_event_module.*' line='LoadModule mpm_event_module modules/mod_mpm_event.so'
   notify: restart httpd

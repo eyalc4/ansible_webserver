@@ -14,6 +14,7 @@
 
 - name: "Install Composer"
   command: php installer --install-dir=/usr/local/bin --filename=composer
+  when: not composer_bin.stat.exists
 
 #- name: "move composer"
 #  command: mv composer.phar /usr/local/bin/composer

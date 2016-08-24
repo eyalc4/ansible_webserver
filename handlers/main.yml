@@ -12,3 +12,5 @@
 - name: restart memcached
   service: name=memcached state=restarted
 
+- name: Restart the firwall
+  service: name=firewalld state=restarted
