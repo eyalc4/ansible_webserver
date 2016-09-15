@@ -6,11 +6,10 @@
   service: name=php-fpm state=restarted
 
 - name: restart webserver
-  service: name=php-fpm state=restarted
-  service: name=httpd state=restarted
+  include: handlers/restart_webserver.yml
 
 - name: restart memcached
   service: name=memcached state=restarted
 
-- name: Restart the firwall
+- name: restart firewalld
   service: name=firewalld state=restarted
