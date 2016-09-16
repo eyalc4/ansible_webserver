@@ -2,11 +2,12 @@
 - name: Ensure firewalld is installed
   yum: name=firewalld state=present
 
-- name: Remove the mask from firewalld to enable restart
-  command: systemctl unmask firewalld
+#- name: Remove the mask from firewalld to enable firewalld configuration
+#  command: systemctl unmask firewalld
 
-- name: Ensure Firewalld is running and start at boot
-  service: name=firewalld.service state=running enabled=yes
+- block:
+  - name: Ensure Firewalld is running and start at boot
+    service: name=firewalld.service state=running enabled=yes
 
 - block:
   - name: Allow all access to tcp port 80
@@ -24,5 +25,5 @@
   notify: restart firewalld
 
 
-- name: Remove the mask from firewalld to enable restart
-  command: systemctl mask firewalld
+#- name: Remove the mask from firewalld to enable restart
+#  command: systemctl mask firewalld
