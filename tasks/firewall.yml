@@ -23,6 +23,7 @@
         - command: systemctl unmask firewalld
         - firewalld: service=http permanent=true state=enabled
         - command: systemctl mask firewalld
+        - notify: restart firewalld
 
 - block:
   - name: Allow all access to tcp port 443
@@ -33,6 +34,7 @@
         - command: systemctl unmask firewalld
         - firewalld: service=http permanent=true state=enabled
         - command: systemctl mask firewalld
+        - notify: restart firewalld
 
 
 #- name: Remove the mask from firewalld to enable restart
