@@ -12,4 +12,4 @@
   service: name=memcached state=restarted
 
 - name: restart firewalld
-  service: name=firewalld state=restarted
+  include: handlers/restart_firewalld.yml
