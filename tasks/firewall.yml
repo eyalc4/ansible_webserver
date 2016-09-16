@@ -8,6 +8,11 @@
 - block:
   - name: Ensure Firewalld is running and start at boot
     service: name=firewalld.service state=running enabled=yes
+rescue:
+    - block:
+        - command: systemctl unmask firewalld
+        - service: name=firewalld.service state=running enabled=yes
+        - command: systemctl mask firewalld
 
 - block:
   - name: Allow all access to tcp port 80
