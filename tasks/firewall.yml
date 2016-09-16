@@ -8,7 +8,7 @@
 - block:
   - name: Ensure Firewalld is running and start at boot
     service: name=firewalld.service state=running enabled=yes
-rescue:
+  rescue:
     - block:
         - command: systemctl unmask firewalld
         - service: name=firewalld.service state=running enabled=yes
