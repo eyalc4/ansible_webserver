@@ -11,10 +11,13 @@
 - name: restart memcached
   service: name=memcached state=restarted
 
-- name: restart firewalld
-  block:
-    - command: systemctl unmask firewalld
-    - service: name=firewalld state=restarted
-    - command: systemctl mask firewalld
+- name: restart firewalld service
+  service: name=firewalld state=restarted
+  notify: mask firewalld
 
-#  include: handlers/restart_firewalld.yml
+- name: restart firewalld
+  command: systemctl unmask firewalld
+  notify: restart firewalld service
+
+- name: mask firewalld
+  command: systemctl mask firewalld
