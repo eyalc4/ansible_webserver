@@ -37,5 +37,5 @@
           notify: restart firewalld
         - command: systemctl mask firewalld
 
-- name: Remove the mask from firewalld to enable restart
+- name: Add the mask back to firewalld to keep it protected
   command: systemctl mask firewalld
