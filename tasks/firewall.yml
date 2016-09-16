@@ -27,7 +27,7 @@
 - block:
   - name: Allow all access to tcp port 443
     firewalld: service=https permanent=true state=enabled
-    notify: restart firewalld2
+    notify: restart firewalld
   rescue:
     - block:
         - command: systemctl unmask firewalld
