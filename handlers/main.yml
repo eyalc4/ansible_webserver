@@ -11,5 +11,5 @@
 - name: restart memcached
   service: name=memcached state=restarted
 
-- name: restart firewalld
+- name: restart firewalld2
   include: handlers/restart_firewalld.yml
