@@ -1,9 +1,0 @@
----
-- name: Remove the mask from firewalld to enable restart
-  command: systemctl unmask firewalld
-
-- name: Restart firewalld
-  service: name=firewalld state=restarted
-
-- name: Add the mask from firewalld to enable restart
-  command: systemctl mask firewalld

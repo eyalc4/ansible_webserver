@@ -12,5 +12,9 @@
   service: name=memcached state=restarted
 
 - name: restart firewalld
-#  service: name=firewalld state=restarted
-  include: restart_firewalld.yml
+  block:
+    - command: systemctl unmask firewalld
+    - service: name=firewalld state=restarted
+    - command: systemctl mask firewalld
+
+#  include: handlers/restart_firewalld.yml
