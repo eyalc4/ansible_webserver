@@ -2,12 +2,24 @@
 - name: Ensure firewalld is installed
   yum: name=firewalld state=present
 
+- name: Check if Composer is installed.
+  stat: path=/usr/local/bin/composer
+  register: composer_bin
+
+- name: Confirm firewalld is running
+  command: service firewalld status
+  register: firewalld_status
+  failed_when: "'NOT' in firewalld_status.stdout"
+  changed_when: False
+
 #- name: Remove the mask from firewalld to enable firewalld configuration
 #  command: systemctl unmask firewalld
+#  when: not firewalld_status
 
 - block:
   - name: Ensure Firewalld is running and start at boot
     service: name=firewalld.service state=running enabled=yes
+    when: not firewalld_status
   rescue:
     - block:
         - command: systemctl unmask firewalld
