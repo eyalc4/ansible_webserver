@@ -29,25 +29,23 @@
 
 - name: Remove the mask from firewalld to enable firewalld configuration
   command: systemctl unmask firewalld
-  when: firewalld_status.failed or firewalld_enabled.failed
+  when: firewalld_status.rc != 0 or firewalld_enabled.rc != 0
 
 - name: Ensure Firewalld is running and start at boot
   service: name=firewalld.service state=running enabled=yes
-  when: firewalld_status.failed or firewalld_enabled.failed
+  when: firewalld_status.rc != 0 or firewalld_enabled.rc != 0
 
 - name: Add the mask to firewalld to enable firewalld configuration
   command: systemctl mask firewalld
-  when: firewalld_status.failed or firewalld_enabled.failed
+  when: firewalld_status.rc != 0 or firewalld_enabled.rc != 0
 
-- block:
-  - name: Allow all access to tcp port 80
-    firewalld: service=http permanent=true state=enabled
-    notify: restart firewalld
+- name: Allow all access to tcp port 80
+  firewalld: service=http permanent=true state=enabled
+  notify: restart firewalld
 
-- block:
-  - name: Allow all access to tcp port 443
-    firewalld: service=https permanent=true state=enabled
-    notify: restart firewalld
+- name: Allow all access to tcp port 443
+  firewalld: service=https permanent=true state=enabled
+  notify: restart firewalld
  # rescue:
  #   - block:
  #       - command: systemctl unmask firewalld
