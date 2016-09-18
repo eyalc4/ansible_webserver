@@ -27,31 +27,22 @@
   #failed_when: "'not' in firewalld_status.stdout"
   #changed_when: False
 
-#- name: Remove the mask from firewalld to enable firewalld configuration
-#  command: systemctl unmask firewalld
-#  when: not firewalld_status
+- name: Remove the mask from firewalld to enable firewalld configuration
+  command: systemctl unmask firewalld
+  when: firewalld_status.failed or firewalld_enabled.failed
 
-- block:
-  - name: Ensure Firewalld is running and start at boot
-    service: name=firewalld.service state=running enabled=yes
-    when: firewalld_status.failed or firewalld_enabled.failed
-  rescue:
-    - block:
-        - command: systemctl unmask firewalld
-        - service: name=firewalld.service state=running enabled=yes
-        - command: systemctl mask firewalld
+- name: Ensure Firewalld is running and start at boot
+  service: name=firewalld.service state=running enabled=yes
+  when: firewalld_status.failed or firewalld_enabled.failed
+
+- name: Add the mask to firewalld to enable firewalld configuration
+  command: systemctl mask firewalld
+  when: firewalld_status.failed or firewalld_enabled.failed
 
 - block:
   - name: Allow all access to tcp port 80
     firewalld: service=http permanent=true state=enabled
     notify: restart firewalld
-#  rescue:
-#    - block:
-#        - command: systemctl unmask firewalld
-#        - firewalld: service=http permanent=true state=enabled
-#          notify: restart firewalld
-#        - command: systemctl mask firewalld
-
 
 - block:
   - name: Allow all access to tcp port 443
