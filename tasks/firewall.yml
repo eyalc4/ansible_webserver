@@ -34,7 +34,7 @@
 - block:
   - name: Ensure Firewalld is running and start at boot
     service: name=firewalld.service state=running enabled=yes
-    when: not firewalld_status.failed or not firewalld_enabled.failed
+    when: firewalld_status.failed or firewalld_enabled.failed
   rescue:
     - block:
         - command: systemctl unmask firewalld
