@@ -17,6 +17,7 @@
 - name: Confirm firewalld is running
   command: servicels is-enabled firewalld
   register: firewalld_enabled
+  failed_when: false
 
 
 - debug: var=firewalld_enabled
