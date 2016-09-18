@@ -16,7 +16,7 @@
 - debug: var=firewalld_status.rc
 
 - name: Confirm firewalld is enabled
-  command: servicels is-enabled firewalld
+  command: systemctl is-enabled firewalld
   register: firewalld_enabled
   ignore_errors: yes
 
@@ -34,7 +34,7 @@
 - block:
   - name: Ensure Firewalld is running and start at boot
     service: name=firewalld.service state=running enabled=yes
-    when: not firewalld_status
+    when: not firewalld_status.failed or not firewalld_enabled.failed
   rescue:
     - block:
         - command: systemctl unmask firewalld
