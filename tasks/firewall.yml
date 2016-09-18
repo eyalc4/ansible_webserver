@@ -7,10 +7,23 @@
   register: composer_bin
 
 - name: Confirm firewalld is running
-  command: firewall-cmd --state
+  command: systemctl is-active firewalld
   register: firewalld_status
-  failed_when: "'not' in firewalld_status.stdout"
-  changed_when: False
+
+
+- debug: var=firewalld_status
+- debug: var=firewalld_status.rc
+
+- name: Confirm firewalld is running
+  command: servicels is-enabled firewalld
+  register: firewalld_enabled
+
+
+- debug: var=firewalld_enabled
+- debug: var=firewalld_status.rc
+
+  #failed_when: "'not' in firewalld_status.stdout"
+  #changed_when: False
 
 #- name: Remove the mask from firewalld to enable firewalld configuration
 #  command: systemctl unmask firewalld
