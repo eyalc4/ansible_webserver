@@ -9,15 +9,16 @@
 - name: Confirm firewalld is running
   command: systemctl is-active firewalld
   register: firewalld_status
+  ignore_errors: yes
 
 
 - debug: var=firewalld_status
 - debug: var=firewalld_status.rc
 
-- name: Confirm firewalld is running
+- name: Confirm firewalld is enabled
   command: servicels is-enabled firewalld
   register: firewalld_enabled
-  failed_when: false
+  ignore_errors: yes
 
 
 - debug: var=firewalld_enabled
