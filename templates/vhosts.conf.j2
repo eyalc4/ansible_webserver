@@ -1,0 +1,30 @@
+<Macro VHost $path $domain>
+<VirtualHost *:80>
+    ServerName $domain
+    ServerAlias www.$domain *.$domain
+    ProxyPassMatch "^/(.*\.php(/.*)?)$" "fcgi://127.0.0.1:9000$path/$1"
+
+    DocumentRoot "$path"
+    <Directory "$path">
+        Options Indexes FollowSymLinks
+        AllowOverride All
+        Order allow,deny
+        Allow from All
+    </Directory>
+
+    ErrorLog "$path/log/$domain.error_log"
+    CustomLog "$path/log/$domain.access_log" combined
+</VirtualHost>
+</Macro>
+
+# Usage:
+# Example:
+# Use VHost path domain
+{% for vhost in apache_vhosts %}
+
+Use VHost vhost.path vhost.domain
+
+{% endfor %}
+
+# Keep this line in the end of the file for cleanup
+UndefMacro VHost
