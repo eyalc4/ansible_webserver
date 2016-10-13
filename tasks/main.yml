@@ -5,3 +5,4 @@
 - include: firewall.yml
 - include: composer.yml
 - include: memcached.yml
+- include: www.yml
