@@ -22,7 +22,7 @@
 # Use VHost path domain
 {% for vhost in apache_vhosts %}
 
-Use VHost vhost.path vhost.domain
+Use VHost {{ vhost.path }} {{ vhost.domain }}
 
 {% endfor %}
 
