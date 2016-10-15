@@ -9,3 +9,4 @@ apache_vhosts:
     path: "/var/www/html"
 
 site_os_user: root
+site_os_group: root
