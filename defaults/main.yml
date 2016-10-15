@@ -7,3 +7,5 @@ apache_vhosts:
   # Supported parameters: aliases, extra_parames
   - domain: "local.dev"
     path: "/var/www/html"
+
+site_os_user: root
