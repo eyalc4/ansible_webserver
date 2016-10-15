@@ -4,9 +4,9 @@
   notify: restart httpd
 
 - name: Verify VHosts directories exists
-  file: path="/var/www/{{ item.name }}" state=directory mode=0755 owner="{{ site_os_user }}" group=users
+  file: path="{{ item.path }}" state=directory mode=0755 owner="{{ site_os_user }}" group=users
   with_items: "{{ apache_vhosts }}"
 
 - name: Verify logs directories exists
-  file: path="/var/www/{{ item.name }}/log" state=directory mode=0755 owner="{{ site_os_user }}" group=users
+  file: path="{{ item.path }}/log" state=directory mode=0755 owner="{{ site_os_user }}" group=users
   with_items: "{{ apache_vhosts }}"
