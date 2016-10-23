@@ -2,9 +2,8 @@
 <VirtualHost *:80>
     ServerName $domain
     ServerAlias www.$domain *.$domain
-    ProxyPassMatch "^/(.*\.php(/.*)?)$" "fcgi://127.0.0.1:9000$path/$1"
-
     DocumentRoot "$path"
+    ProxyPassMatch "^/(.*\.php(/.*)?)$" "fcgi://127.0.0.1:9000$path/$1"
     <Directory "$path">
         Options Indexes FollowSymLinks
         AllowOverride All
