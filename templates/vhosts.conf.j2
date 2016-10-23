@@ -11,8 +11,8 @@
         Allow from All
     </Directory>
 
-    ErrorLog "$path/log/$domain.error_log"
-    CustomLog "$path/log/$domain.access_log" combined
+    ErrorLog "/var/log/$domain.error_log"
+    CustomLog "/var/log/$domain.access_log" combined
 </VirtualHost>
 </Macro>
 
