@@ -3,7 +3,7 @@
   yum: name=php-fpm state=present enablerepo=remi,remi-php{{ php_version }}
 
 - name: Ensure php-fpm is running and start at boot
-  service: name=php-fpm state=running enabled=yes
+  service: name=php-fpm state=started enabled=yes
 
 - name: Disable mod_php
   lineinfile: dest=/etc/httpd/conf.d/php.conf state=present regexp='^.*SetHandler application/x-httpd-php$' line='\t#SetHandler application/x-httpd-php'

@@ -9,7 +9,7 @@
   notify: restart httpd
 
 - name: Ensure Apache is running and start at boot
-  service: name=httpd state=running enabled=yes
+  service: name=httpd state=started enabled=yes
 
 - name: Disable MPM-prefork
   lineinfile: dest=/etc/httpd/conf.modules.d/00-mpm.conf state=present regexp='^LoadModule mpm_prefork_module.*' line='#LoadModule mpm_prefork_module modules/mod_mpm_prefork.so' backrefs=yes

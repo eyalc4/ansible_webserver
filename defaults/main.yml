@@ -10,3 +10,5 @@ apache_vhosts:
 
 site_os_user: root
 site_os_group: root
+
+composer_path: "/usr/local/bin/composer"

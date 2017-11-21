@@ -12,30 +12,18 @@
   ignore_errors: yes
   changed_when: false
 
-
-- debug: var=firewalld_status
-- debug: var=firewalld_status.rc
-
 - name: Confirm firewalld is enabled
   command: systemctl is-enabled firewalld
   register: firewalld_enabled
   ignore_errors: yes
   changed_when: false
 
-- debug: var=firewalld_enabled.rc
-- debug: var=firewalld_status.rc
-
-  #failed_when: "'not' in firewalld_status.stdout"
-  #changed_when: False
-
 - name: Remove the mask from firewalld to enable firewalld configuration
   command: systemctl unmask firewalld
-  #when: firewalld_status.rc != 0 or firewalld_enabled.rc != 0
   changed_when: false
 
 - name: Ensure Firewalld is running and start at boot
-  service: name=firewalld.service state=running enabled=yes
- # when: firewalld_status.rc != 0 or firewalld_enabled.rc != 0
+  service: name=firewalld.service state=started enabled=yes
 
 - name: Add the mask to firewalld to enable firewalld configuration
   command: systemctl mask firewalld
