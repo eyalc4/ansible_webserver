@@ -2,13 +2,16 @@
 include: memcached.yml
 
 php_version: 56
+site_domain: "local.dev"
+site_project_name: "website"
+site_document_root: "/var/www/{{site_project_name}}"
 
 apache_vhosts:
   # Supported parameters: aliases, extra_parames
-  - domain: "local.dev"
-    path: "/var/www/html"
+    - domain: "local.dev"
+      path: "/var/www/html"
 
 site_os_user: root
 site_os_group: root
 
-composer_path: "/usr/local/bin/composer"
+composer_path: /usr/local/bin/composer"

@@ -1,28 +1,35 @@
 ---
-- name: "Composer: Set composer file variable"
+- name: Composer - Set composer file variable
   stat: path=/usr/local/bin/composer
   register: composer_path
   ignore_errors: True
 
-- name: "Composer: Check if Composer is installed"
-  stat: path={ composer_path }
+- name: Composer Check if Composer is installed
+  stat: path=/usr/local/bin/composer
   register: composer_bin
 
-- name: "Composer: Download Composer installer"
+- name: Composer - Download Composer installer
   get_url:
     url: https://getcomposer.org/installer
     dest: /tmp/composer-installer.php
     mode: 0755
   when: not composer_bin.stat.exists
 
-- name: "Composer: Run Composer installer"
+- name: Composer - Run Composer installer
   command: >
     php composer-installer.php
     chdir=/tmp
   when: not composer_bin.stat.exists
 
-- name: "Composer: Move Composer into globally-accessible location"
-  shell: >
-    mv /tmp/composer.phar {{ composer_path }}
-    creates={{ composer_path }}
+#- name: Composer - Move Composer into globally-accessible location
+#  shell: >
+#    mv /tmp/composer.phar {{ composer_path }}
+#  when: not composer_bin.stat.exists
+
+- name: Composer - Copy Composer into globally-accessible location
+  copy: remote_src=true src=/tmp/composer.phar dest=/usr/local/bin/composer
+  when: not composer_bin.stat.exists
+
+- name: Composer remove temp file
+  file: path=/tmp/composer.phar state=absent
   when: not composer_bin.stat.exists

@@ -2,10 +2,6 @@
 - name: Ensure firewalld is installed
   yum: name=firewalld state=present
 
-- name: Check if Composer is installed.
-  stat: path=/usr/local/bin/composer
-  register: composer_bin
-
 - name: Confirm firewalld is running
   command: systemctl is-active firewalld
   register: firewalld_status
