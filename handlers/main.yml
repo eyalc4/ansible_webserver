@@ -1,4 +1,7 @@
 ---
+- name: restart firewalld
+  include: handlers/restart_firewalld.yml
+
 - name: restart httpd
   service: name=httpd state=restarted
 
@@ -15,9 +18,9 @@
   service: name=firewalld state=restarted
   notify: mask firewalld
 
-- name: restart firewalld
-  command: systemctl unmask firewalld
-  notify: restart firewalld service
+##- name: restart firewalld
+##  command: systemctl unmask firewalld
+#  notify: restart firewalld service
 
 - name: mask firewalld
   command: systemctl mask firewalld

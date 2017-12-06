@@ -31,7 +31,6 @@
 
 - name: Add the mask to firewalld to enable firewalld configuration
   command: systemctl mask firewalld
-  #when: firewalld_status.rc != 0 or firewalld_enabled.rc != 0
   changed_when: false
  # rescue:
  #   - block:
