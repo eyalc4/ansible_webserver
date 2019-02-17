@@ -6,5 +6,6 @@
 - include: composer.yml
 - include: memcached.yml
 - include: www.yml
+- include: ssl.yml
 #- include: letsencrypt.yml
 #- include: php-redis.yml
