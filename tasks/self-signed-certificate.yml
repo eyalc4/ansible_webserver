@@ -1,0 +1,72 @@
+---
+# Setup ssl
+- name: Make sure mod ssl is installed
+  yum: name=mod_ssl state=present
+
+- name: Make sure the private keys directory exists
+  file:
+    path: "{{ ssl_private_key_dir }}"
+    state: directory
+    mode: 0700
+    owner: "root"
+
+- name: Make sure the certificate directory exists
+  file:
+    path: "{{ ssl_certificate_dir }}"
+    state: directory
+    mode: 0700
+    owner: "root"
+
+- name: Check if the private key for the self signed certificate exists.
+  stat:
+    path: "{{ ssl_private_key_dir }}/localhost.key"
+  register: certificate_key_file
+  ignore_errors: true
+
+- name: Check if the self signed certificate exists.
+  stat:
+    path: "{{ ssl_certificate_dir }}/localhost.crt"
+  register: certificate_file
+  ignore_errors: true
+
+- name: Create Self Sign ceritificate to be used for local development
+  command: 'openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout {{ssl_private_key_dir}}/localhost.key -out {{ssl_certificate_dir}}/localhost.crt \
+  -subj "/C={{certificate_country}}/ST={{certificate_state}}/L={{ceritifcate_language}}/O={{certificate_organization}}/OU={{certificate_department}}/emailAddress={{certificate_email}}/CN={{certificate_organization}}"'
+  when: not (certificate_key_file.stat.exists and certificate_file.stat.exists)
+
+- name: Check if the strong Diffie-Hellman group file exists
+  stat:
+    path: "{{ ssl_certificate_dir }}/dhparam.pem"
+  register: dhparam_file
+  ignore_errors: true
+  changed_when: false
+
+- name: Check if the strong Diffie-Hellman was already added to the certificate
+  lineinfile:
+    dest: "{{ ssl_certificate_dir }}/localhost.crt"
+    line: "-----END DH PARAMETERS-----"
+  check_mode: yes
+  register: dhparam_added
+  changed_when: false
+
+- name: Make sure we have strong Diffie-Hellman group, which is used in negotiating Perfect Forward Secrecy with clients
+  command: "openssl dhparam -out {{ ssl_certificate_dir }}/dhparam.pem 2048"
+  when: dhparam_added.msg == "line added"
+
+- name: Append the strong Diffie-Hellman group to the certificate
+  shell: "cat {{ ssl_certificate_dir }}/dhparam.pem >> {{ ssl_certificate_dir }}/localhost.crt"
+  when: dhparam_added.msg == "line added"
+
+- name: Add the ssl self-signed certificate to the ssl.conf
+  lineinfile:
+    path: /etc/httpd/conf.d/ssl.conf
+    regexp: '^SSLCertificateFile'
+    line: 'SSLCertificateFile {{ ssl_certificate_dir }}/localhost.crt'
+  notify: restart httpd
+
+- name: Add the ssl self-signed private key to the ssl.conf
+  lineinfile:
+    path: /etc/httpd/conf.d/ssl.conf
+    regexp: '^SSLCertificateKeyFile'
+    line: 'SSLCertificateKeyFile {{ ssl_private_key_dir }}/localhost.key'
+  notify: restart httpd
